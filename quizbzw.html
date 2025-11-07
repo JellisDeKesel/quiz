@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>quiz</title>
+</head>
+<body>
+  <h1>quiz</h1>
+
+  <p id="vraag"></p>
+  <button id="knop1"></button>
+  <button id="knop2"></button>
+
+  <p id="feedback"></p>
+  <button id="volgende" style="display:none;">volgende</button>
+
+  <script>
+    const vragen = [
+      { vraag: "Vraag: welke school is dit?", antwoorden: ["Campus Kompas?", "SGW"], juist: 0 },
+      { vraag: "Hoeveel dagen heeft een week?", antwoorden: ["5", "7"], juist: 1 },
+      { vraag: "wie is beter in les geven", antwoorden: ["Meneer van Drogenbroek", "liesbeth de meyer"], juist: 0 }
+    ];
+
+    let nr = 0;
+    let score = 0;
+
+    const vraag = document.getElementById("vraag");
+    const knop1 = document.getElementById("knop1");
+    const knop2 = document.getElementById("knop2");
+    const feedback = document.getElementById("feedback");
+    const volgende = document.getElementById("volgende");
+
+    function toonVraag() {
+      const q = vragen[nr];
+      vraag.textContent = q.vraag;
+      knop1.textContent = q.antwoorden[0];
+      knop2.textContent = q.antwoorden[1];
+      feedback.textContent = "";
+      volgende.style.display = "none";
+    }
+
+    function controleerAntwoord(keuze) {
+      const juist = vragen[nr].juist;
+      if (keuze === juist) {
+        feedback.textContent = "juist!";
+        score++;
+      } else {
+        feedback.textContent = "verkeerd!";
+      }
+      volgende.style.display = "inline";
+    }
+
+    knop1.onclick = () => controleerAntwoord(0);
+    knop2.onclick = () => controleerAntwoord(1);
+
+    volgende.onclick = () => {
+      nr++;
+      if (nr < vragen.length) {
+        toonVraag();
+      } else {
+        if (score > 1) {
+        vraag.textContent = "gefeliciteerd";
+      }
+      else {
+           vraag.textContent = "boe";
+
+      }
+        knop1.style.display = "none";
+        knop2.style.display = "none";
+        feedback.textContent = "score: " + score + " / " + vragen.length;
+        volgende.style.display = "none";
+        localStorage.setItem("quizScore", score);
+      }
+    };
+
+    toonVraag();
+  </script>
+</body>
+</html>
